@@ -2,11 +2,13 @@
 
 ## 体験URL
 
-https://human-loop-guest-ryuji.ryuji-pilates.chatgpt.site
+https://human-loop-henna.vercel.app/
 
 ゲストコード： **HUMANLOOP**
 
 スマホ・PCのブラウザから利用できます。アプリやOperaのインストール、ChatGPTへのログインは不要です。
+
+予備URL： https://human-loop-guest-ryuji.ryuji-pilates.chatgpt.site
 
 ## 紹介文
 

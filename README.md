@@ -4,7 +4,9 @@
 
 ## 提出用のゲスト体験
 
-**URL： https://human-loop-guest-ryuji.ryuji-pilates.chatgpt.site**
+**URL： https://human-loop-henna.vercel.app/**
+
+予備URL： https://human-loop-guest-ryuji.ryuji-pilates.chatgpt.site
 
 **ゲストコード： `HUMANLOOP`**
 
@@ -68,6 +70,10 @@ npm run build:guest
 `.guest-build/` にゲスト用の5ファイルだけを出力します。ビルド時にも、ゲストのJavaScriptに分析用API・ローカル接続先・ネットワーククライアントが含まれていないことを確認します。ゲストコードは入場体験用であるため、秘密の値として扱わないでください。
 
 ### Vercelで公開する場合
+
+現在の提出版は、GitHub連携を使わず、Vercelの「Choose a folder to deploy」から `.guest-build/` の5ファイルだけを直接アップロードしています。GitHubへのpushは現在の公開ページには自動反映されません。更新時は `npm run build:guest` を実行してゲスト版だけを再公開してください。リポジトリ全体や本人用の `public/` をフォルダアップロードしないでください。
+
+今後GitHub連携を設定する場合は、次の手順を使います。
 
 VercelにGitHubのこのリポジトリを取り込み、Root Directoryはリポジトリのルートのままにします。`vercel.json` がFrameworkをOther、Build Commandを `npm run build:guest`、Output Directoryを `.guest-build` に設定します。本人用の `public/` を公開先にしないでください。
 
