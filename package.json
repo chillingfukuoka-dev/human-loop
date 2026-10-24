@@ -1,0 +1,16 @@
+{
+  "name": "sales-prep-ai",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "mobile": "node scripts/mobile-access.mjs",
+    "test:mobile": "node --test test/mobile-gateway.test.mjs"
+  },
+  "dependencies": {
+    "openai": "^7.36.0"
+  }
+}
