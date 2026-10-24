@@ -91,7 +91,7 @@ test("an unexpected selected tab is neither read nor closed", async () => {
 
 test("concurrent API inspections cannot interleave two accounts, and the lock is released", async () => {
   const from = server.indexOf("async function handle(");
-  const to = server.indexOf("createServer((req, res)", from);
+  const to = server.indexOf("const ownerHandler", from);
   const handler = server.slice(from, to);
   let release;
   const pending = new Promise((resolve) => { release = resolve; });

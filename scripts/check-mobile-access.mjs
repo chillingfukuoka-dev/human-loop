@@ -12,7 +12,7 @@ async function get(path) {
 }
 try {
   const anonymous = await get("/api/demo");
-  assert.equal(anonymous.status, 200, "Public API access must work");
+  assert.equal(anonymous.status, 401, "Real APIs must require the owner session");
   await anonymous.arrayBuffer();
   const index = await get("/");
   assert.equal(index.status, 200);
@@ -23,7 +23,10 @@ try {
   const secretFile = await get("/.mobile/access.json");
   assert.equal(secretFile.status, 404);
   await secretFile.arrayBuffer();
-  console.log("Public HTTPS checks passed: app, public API, CSS, and private-file blocking.");
+  const inspect = await fetch(new URL("/api/inspect-instagram", origin), { ...requestOptions(), method: "POST", headers: { Origin: origin.origin, "Content-Type": "application/json" }, body: "{}" });
+  assert.equal(inspect.status, 401, "Anonymous callers must never start Opera");
+  await inspect.arrayBuffer();
+  console.log("Owner HTTPS checks passed: login page, authenticated APIs, CSS, and private-file blocking.");
 } catch (error) {
   console.error(error.message);
   process.exitCode = 1;

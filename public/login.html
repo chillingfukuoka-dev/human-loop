@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f3efe7" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>本人用ログイン | Human Loop</title>
+  <link rel="icon" href="/flower.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="login-shell">
+    <a class="brand" href="/"><img src="/flower.svg" width="32" height="32" alt="" />Human Loop<span class="brand-dot">.</span></a>
+    <section class="panel login-panel" aria-labelledby="loginTitle">
+      <span class="section-kicker">YOUR PRIVATE WORKSPACE</span>
+      <h1 id="loginTitle">あなたの準備ノートへ。</h1>
+      <p class="field-hint" id="loginDescription">本人用のパスワードでログインしてください。</p>
+      <form id="loginForm">
+        <label id="passwordLabel">パスワード<input id="password" name="password" type="password" autocomplete="current-password" maxlength="256" required /></label>
+        <label id="confirmField" hidden>もう一度入力<input id="confirmPassword" type="password" autocomplete="new-password" maxlength="256" /></label>
+        <p id="loginNotice" class="notice" role="status" aria-live="polite"></p>
+        <button class="primary-button" id="loginButton" disabled>接続を確認しています…</button>
+      </form>
+      <p class="login-footnote">このページはあなた専用です。ゲストコードでは実際の分析は使えません。</p>
+    </section>
+  </main>
+  <script src="/login.js" defer></script>
+</body>
+</html>

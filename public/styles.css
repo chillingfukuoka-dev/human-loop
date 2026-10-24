@@ -25,6 +25,12 @@ button, a { transition: background .2s, color .2s, box-shadow .2s, transform .2s
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
 ::selection { background: #dce2cc; color: var(--ink); }
 [hidden] { display: none !important; }
+.login-shell { width: min(100% - 36px, 500px); margin: 64px auto; }
+.login-shell > .brand { margin-bottom: 32px; }
+.login-panel { padding: clamp(22px, 5vw, 36px); }
+.login-panel h1 { font-size: clamp(24px, 5vw, 31px); margin: 16px 0; }
+.login-footnote { color: var(--muted); font-size: 11px; line-height: 1.9; margin: 24px 0 0; }
+.owner-badge { padding: 5px 10px; border-radius: 20px; background: var(--accent-soft); color: var(--accent-dark); font-size: 11px; }
 .icon-library { position: absolute; width: 0; height: 0; overflow: hidden; }
 .icon { width: 21px; height: 21px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .shell { max-width: 1216px; margin: auto; padding: 0 48px; }

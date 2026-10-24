@@ -14,6 +14,7 @@ async function fixture(t) {
     req.on("data", chunk => { body += chunk; });
     req.on("end", () => {
       calls.push({ path: req.url, method: req.method, headers: req.headers, body });
+      if (req.url === "/api/auth/login") res.setHeader("Set-Cookie", ["human_loop_owner=" + "A".repeat(43) + "; HttpOnly; Secure", "sessionid=should-not-be-relayed"]);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ ok: true }));
     });
@@ -45,16 +46,32 @@ test("requires an HTTPS public origin and valid upstream port", () => {
   assert.throws(() => gateway.setPublicOrigin("http://mobile.example.test"));
 });
 
-test("mobile gateway is public and forwards only the app routes", async t => {
+test("mobile gateway forwards only the approved app and login routes", async t => {
   const { send, calls } = await fixture(t);
-  for (const path of ["/", "/index.html", "/app.js", "/styles.css", "/meeting-note.svg", "/flower.svg", "/api/demo", "/api/opera-status"]) {
+  for (const path of ["/", "/index.html", "/app.js", "/styles.css", "/meeting-note.svg", "/flower.svg", "/api/demo", "/api/opera-status", "/api/auth/status", "/login.js", "/login.html"]) {
     assert.equal((await send(path)).status, 200);
   }
   assert.equal((await send("/mobile/login")).status, 404);
   for (const path of ["/.env.local", "/../server.mjs", "/.mobile/access.json", "/%2e%2e%2fserver.mjs", "/unknown", "/api/admin"]) {
     assert.equal((await send(path)).status, 404);
   }
-  assert.equal(calls.length, 8);
+  assert.equal(calls.length, 11);
+});
+
+test("only the owner cookie is relayed, never Instagram cookies or setup requests", async t => {
+  const { send, calls } = await fixture(t);
+  const token = "A".repeat(43);
+  const response = await send("/api/auth/login", { method: "POST", body: "{}", headers: {
+    Origin: origin, "Content-Type": "application/json", Cookie: `sessionid=private; human_loop_owner=${token}; csrftoken=private`
+  } });
+  assert.equal(response.status, 200);
+  assert.equal(calls[0].headers.cookie, `human_loop_owner=${token}`);
+  assert.equal(calls[0].headers.host, "mobile.example.test");
+  assert.equal(calls[0].headers.origin, origin);
+  assert.equal(response.headers["set-cookie"].length, 1);
+  assert.match(response.headers["set-cookie"][0], /^human_loop_owner=/);
+  assert.equal((await send("/api/auth/setup", { method: "POST", body: "{}", headers: { Origin: origin, "Content-Type": "application/json" } })).status, 403);
+  assert.equal(calls.length, 1);
 });
 
 test("forwards valid JSON writes without exposing incoming cookies", async t => {

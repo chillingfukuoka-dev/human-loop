@@ -39,7 +39,7 @@ process.on("SIGTERM", () => stop());
 let startupTimer;
 
 try {
-  const local = await fetch(`http://127.0.0.1:${upstreamPort}/api/demo`, { signal: AbortSignal.timeout(5000) });
+  const local = await fetch(`http://127.0.0.1:${upstreamPort}/api/auth/status`, { signal: AbortSignal.timeout(5000) });
   if (!local.ok) throw new Error("ローカルサイトが応答していません。先に npm run dev を起動してください。");
   await local.arrayBuffer();
   await new Promise((resolve, reject) => {
@@ -48,7 +48,7 @@ try {
   });
   ownsState = true;
   saveState("starting");
-  console.log("パスワードなしの携帯用接続を準備しています。リンクを知っている人が開けます。");
+  console.log("本人用の携帯接続を準備しています。実際の分析には本人用ログインが必要です。");
   tunnel = spawn(cloudflared, ["tunnel", "--url", `http://127.0.0.1:${gatewayPort}`, "--protocol", "http2", "--no-autoupdate"], { stdio: ["ignore", "pipe", "pipe"], cwd: root });
   let logTail = "";
   const onLog = chunk => {
@@ -66,7 +66,7 @@ try {
     if (accessUrl && text.includes("Registered tunnel connection")) {
       saveState("ready");
       clearTimeout(startupTimer);
-      console.log(`\n接続できました: ${accessUrl}\nパスワード入力はありません。\n停止するときは、このコマンドを Ctrl+C で終了してください。`);
+      console.log(`\n接続できました: ${accessUrl}\n本人用のパスワードでログインしてください。ゲストには別のお試し用URLを渡してください。\n停止するときは、このコマンドを Ctrl+C で終了してください。`);
     }
     if (text.includes("Lost connection with the edge") || text.includes("Connection terminated")) saveState("reconnecting");
     if (text.includes("Unauthorized: Tunnel not found")) {

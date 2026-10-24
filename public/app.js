@@ -9,7 +9,12 @@ async function fetchWithTimeout(path, options = {}, timeoutMs = 30_000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    return await fetch(apiUrl(path), { ...options, signal: controller.signal });
+    const response = await fetch(apiUrl(path), { ...options, signal: controller.signal });
+    if (response.status === 401) {
+      window.location.assign("/login.html");
+      throw new Error("本人用のログインが必要です。");
+    }
+    return response;
   } finally {
     clearTimeout(timer);
   }
@@ -19,6 +24,13 @@ const escapeHtml = (value = "") => String(value).replace(/[&<>'"]/g, (char) => (
 const setNotice = (message = "", tone = "error") => { notice.textContent = message; notice.dataset.tone = tone; };
 const instagramStorageKey = "meet-ready-instagram-urls";
 let latestOfferRecommendation = null;
+document.querySelector("#logoutButton")?.addEventListener("click", async () => {
+  try {
+    const response = await fetch("/api/auth/logout", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
+    if (!response.ok) throw new Error();
+    window.location.replace("/login.html");
+  } catch { setNotice("ログアウトできませんでした。接続を確認してください。"); }
+});
 
 function renderOfferRecommendation() {
   document.querySelector("#offerRecommendation").hidden = form.elements.offer.value !== "auto";

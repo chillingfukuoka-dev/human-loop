@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f3efe7" />
+  <meta name="description" content="Human Loopのお試し版。架空の人物のサンプルで、人と話す前の準備を体験できます。" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'" />
+  <title>Human Loop｜ゲスト体験</title>
+  <link rel="icon" href="./flower.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar"><a class="brand" href="./"><img src="./flower.svg" alt="" width="30" height="30" />Human Loop<span>.</span></a><span class="badge">ゲスト体験</span></header>
+    <main>
+      <section class="intro"><span class="eyebrow">A LITTLE PREP, A LITTLE CONFIDENCE</span><h1>話す前に、<br />ちょっと準備。</h1><p>相手を知って、自然に話すきっかけを。<br />Human Loopの流れを、サンプルで体験できます。</p></section>
+      <section id="gate" class="panel gate" aria-labelledby="gateTitle">
+        <span class="kicker">WELCOME</span><h2 id="gateTitle">お試しノートを開く。</h2>
+        <p class="muted">案内されたゲストコードを入力してください。</p>
+        <form id="guestLogin"><label>ゲストコード<input id="guestCode" name="guestCode" autocomplete="off" autocapitalize="characters" maxlength="40" placeholder="ゲストコード" required /></label><p id="gateNotice" class="notice" role="status" aria-live="polite"></p><button class="primary" type="submit">体験をはじめる <span aria-hidden="true">↗</span></button></form>
+        <p class="small">コードは体験を始める合言葉です。個人情報を守るためのログインではありません。このページには架空のサンプルだけが入っています。</p>
+      </section>
+      <section id="demo" hidden aria-labelledby="demoTitle">
+        <div class="demo-banner"><strong>サンプル体験です</strong><span>Instagramの読み取り・新しいAI分析は行いません。</span></div>
+        <div class="section-title"><div><span class="kicker">LET'S GET READY</span><h2 id="demoTitle">話す相手を選ぼう。</h2></div><button id="leaveDemo" class="text-button" type="button">体験を終了</button></div>
+        <div class="workspace">
+          <form id="demoForm" class="panel form-panel">
+            <span class="step">01　相手を選ぶ</span><label>話す相手（架空の人物）<select id="person" name="person"><option value="yoga">はるかさん｜ヨガ講師</option><option value="cooking">そうたさん｜料理教室</option><option value="boxing">あおいさん｜ボクシング</option></select></label>
+            <div class="profile-note"><strong id="sampleRole"></strong><p id="sampleBio"></p><span>あなた側の設定：ランニング・体づくり・仕事の時短に関心がある人</span></div>
+            <span class="step">02　紹介したいものと時間</span><div class="two-fields"><label>紹介したいもの<select id="offer" name="offer"><option value="auto">おすすめの例を見る</option><option>ランニング</option><option>ピラティス</option><option>AI</option><option>その他</option></select></label><label>お話しする時間<select id="duration" name="duration"><option>5分</option><option selected>30分</option><option>1時間</option><option>2時間</option></select></label></div>
+            <label id="otherField" hidden>その他の内容<input id="otherOffer" name="otherOffer" maxlength="60" placeholder="例：英会話レッスン" disabled /></label>
+            <p id="demoNotice" class="notice" role="status" aria-live="polite"></p><button class="primary" type="submit">準備ノートの例を見る <span aria-hidden="true">→</span></button>
+            <p class="small">内容はすべて事前に作った例です。選んだ時間・商品に合わせて、表示を切り替えます。</p>
+          </form>
+          <aside class="panel how"><span class="kicker">HOW IT WORKS</span><h3>会う前の、ひと呼吸。</h3><ol><li>相手のことを知る</li><li>共通点から、話す入口を探す</li><li>相手の話を聞いてから、紹介する</li></ol><p>本来の本人用アプリは、公開情報を確かめて準備します。このゲスト版は、その流れだけを体験するものです。</p></aside>
+        </div>
+        <section id="results" hidden aria-labelledby="resultsTitle"><div class="section-title"><div><span class="kicker">YOUR SAMPLE NOTE</span><h2 id="resultsTitle" tabindex="-1">準備ノートのサンプル</h2></div><span class="badge">架空の人物・事前作成</span></div><p id="resultMeta" class="muted"></p><div class="cards">
+          <article class="panel card"><span class="kicker">01 相手を知る</span><h3>興味がありそうなこと</h3><ul id="interests"></ul></article>
+          <article class="panel card"><span class="kicker">02 話す入口</span><h3>2人の共通点</h3><ul id="common"></ul><p class="small">共通点も架空の設定です。実際の相手との共通点ではありません。</p></article>
+          <article class="panel card"><span class="kicker">02 話す入口</span><h3>話しかける言葉、3つ。</h3><ul id="phrases"></ul></article>
+          <article class="panel card recommendation"><span class="kicker">相手に合わせた提案の例</span><h3 id="offerTitle"></h3><p id="offerReason"></p><p id="proposal"></p></article>
+          <article class="panel card wide"><span class="kicker">03 話す順番</span><h3>まずは聞く、からはじめよう。</h3><ol id="timeline" class="timeline"></ol></article>
+          <article class="panel card wide"><span class="kicker">04 反論の準備</span><h3>迷いには、こんな返し方を。</h3><dl id="objections"></dl></article>
+        </div></section>
+      </section>
+    </main>
+    <footer><img src="./flower.svg" width="23" height="23" alt="" /><p>AIで準備する → 人に会って話す → AIで振り返る → また人に会う。</p><span>この体験版は、運営者のMac・Opera・AIには接続しません。</span></footer>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

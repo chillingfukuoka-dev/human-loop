@@ -7,6 +7,7 @@ import { createOfferRecommender } from "./lib/offer-recommendation.mjs";
 import { offerGuidanceFor } from "./lib/offer-guidance.mjs";
 import { analyzeInstagramInterests, createInterestAnalyzer, interestConversation, interestPhrases, interestVideos } from "./lib/instagram-interests.mjs";
 import { extractInstagramSources, matchesInstagramPage } from "./lib/instagram-evidence.mjs";
+import { createOwnerGate } from "./lib/owner-access.mjs";
 
 const root = resolve(fileURLToPath(new URL(".", import.meta.url)));
 const publicDir = join(root, "public");
@@ -667,9 +668,7 @@ function contentType(path) {
 }
 
 function allowLocalApi(res) {
-  res.setHeader("access-control-allow-origin", "*");
-  res.setHeader("access-control-allow-methods", "GET, POST, OPTIONS");
-  res.setHeader("access-control-allow-headers", "content-type");
+  res.setHeader("X-Content-Type-Options", "nosniff");
 }
 
 async function prepareNote(rawInput) {
@@ -767,12 +766,13 @@ async function handle(req, res) {
   let pathname = decodeURIComponent(url.pathname);
   if (pathname === "/") pathname = "/index.html";
   const filePath = normalize(join(publicDir, pathname));
-  if (!filePath.startsWith(publicDir) || !existsSync(filePath) || !statSync(filePath).isFile()) return json(res, 404, { error: "Not Found" });
+  if (!filePath.startsWith(`${publicDir}/`) || !existsSync(filePath) || !statSync(filePath).isFile()) return json(res, 404, { error: "Not Found" });
   res.writeHead(200, { "content-type": contentType(filePath) });
   res.end(readFileSync(filePath));
 }
 
-createServer((req, res) => { handle(req, res).catch((error) => json(res, 500, { error: error.message })); }).listen(port, () => {
+const ownerHandler = createOwnerGate({ handler: handle, stateFile: join(root, ".private", "owner-auth.json"), assetsDir: publicDir });
+createServer(ownerHandler).listen(port, "127.0.0.1", () => {
   console.log(`Sales Prep AI: http://localhost:${port}`);
 });
 

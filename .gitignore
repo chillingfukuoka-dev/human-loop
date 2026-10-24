@@ -7,4 +7,6 @@ node_modules/
 .mobile/
 artifacts/
 .vercel/
+.private/
+.guest-build/
 
