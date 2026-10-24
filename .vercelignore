@@ -1,0 +1,9 @@
+.env
+.env.*
+.private/
+.mobile/
+artifacts/
+node_modules/
+.git/
+.vercel/
+.guest-build/

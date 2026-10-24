@@ -67,6 +67,12 @@ npm run build:guest
 
 `.guest-build/` にゲスト用の5ファイルだけを出力します。ビルド時にも、ゲストのJavaScriptに分析用API・ローカル接続先・ネットワーククライアントが含まれていないことを確認します。ゲストコードは入場体験用であるため、秘密の値として扱わないでください。
 
+### Vercelで公開する場合
+
+VercelにGitHubのこのリポジトリを取り込み、Root Directoryはリポジトリのルートのままにします。`vercel.json` がFrameworkをOther、Build Commandを `npm run build:guest`、Output Directoryを `.guest-build` に設定します。本人用の `public/` を公開先にしないでください。
+
+この設定で公開されるのはゲスト版だけです。本人用のNode.jsサーバー・Opera・OllamaはVercel上では動かしません。ローカルからVercel CLIを使う場合も、`.vercelignore` で本人用パスワードやAPIキー、携帯用接続情報、テスト画像を送信対象から除外します。Vercelのログインや初回登録が必要な場合は、先に本人による認証を済ませてください。
+
 ## AI設定
 
 初期設定は、APIキー不要のローカルOllamaです。Ollamaを起動し、モデルを一度だけ取得してください。

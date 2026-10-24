@@ -41,3 +41,16 @@ test("sample interests do not change when the visitor manually selects a product
     assert.match(note.reason, /手動/);
   }
 });
+
+test("Vercel publishes only the isolated guest build and excludes private local files", () => {
+  const config = JSON.parse(readFileSync(new URL("../vercel.json", import.meta.url), "utf8"));
+  assert.equal(config.framework, null);
+  assert.equal(config.buildCommand, "npm run build:guest");
+  assert.equal(config.outputDirectory, ".guest-build");
+  assert.equal(config.functions, undefined);
+  assert.equal(config.rewrites, undefined);
+  const headers = config.headers.flatMap(rule => rule.headers);
+  assert.match(headers.find(header => header.key === "Content-Security-Policy").value, /connect-src 'none'/);
+  const ignored = readFileSync(new URL("../.vercelignore", import.meta.url), "utf8").split(/\r?\n/);
+  for (const pattern of [".env", ".env.*", ".private/", ".mobile/", "artifacts/"]) assert.ok(ignored.includes(pattern));
+});
